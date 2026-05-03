@@ -19,30 +19,11 @@ public class SoulShackleListener implements Listener {
     }
 
     @EventHandler
-    public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            SoulShackleAbility ability = (SoulShackleAbility) plugin.getAbilityManager().getAbilityByName("Soul Shackle");
-            if (ability != null && ability.isStatue(player.getUniqueId())) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        SoulShackleAbility ability = (SoulShackleAbility) plugin.getAbilityManager().getAbilityByName("Soul Shackle");
-        if (ability != null && ability.isStatue(player.getUniqueId())) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
     public void onDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
         SoulShackleAbility ability = (SoulShackleAbility) plugin.getAbilityManager().getAbilityByName("Soul Shackle");
-        if (ability != null && ability.isBeingControlled(player.getUniqueId())) {
+        // The Prompt says the user (controller) cannot throw items while controlling.
+        if (ability != null && ability.isController(player.getUniqueId())) {
             event.setCancelled(true);
         }
     }
@@ -50,7 +31,7 @@ public class SoulShackleListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER) {
-            if (event.getCurrentItem().getItemMeta().getDisplayName().equals("§c§lLOCKED")) {
+            if (event.getCurrentItem().hasItemMeta() && "§c§lLOCKED".equals(event.getCurrentItem().getItemMeta().getDisplayName())) {
                 event.setCancelled(true);
             }
         }

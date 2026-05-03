@@ -169,6 +169,10 @@ public class SoulShackleAbility extends Ability {
         return controlling.containsValue(uuid);
     }
 
+    public boolean isController(UUID uuid) {
+        return controlling.containsKey(uuid);
+    }
+
     public boolean isStatue(UUID uuid) {
         return statues.containsKey(uuid);
     }
