@@ -1,9 +1,11 @@
+name: DiabloSmpPlugin
+version: 1.0.0
 main: com.diablosmp.plugin.DiabloPlugin
-name: DiabloPlugin
-version: 1.0-SNAPSHOT
-api-version: 1.20
+api-version: 1.21
+description: Boss Pack for Diablo SMP
 commands:
   diablo:
-    description: Admin command for DiabloPlugin
+    description: Admin commands.
+    permission: diablo.admin
   trust:
-    description: Manage player trust contracts
+    description: Trust players for item trade.
