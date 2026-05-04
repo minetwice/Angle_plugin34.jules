@@ -1,45 +1,34 @@
 package com.diablosmp.plugin.listeners;
 
-import com.diablosmp.plugin.utils.ParticleUtils;
+import com.diablosmp.plugin.managers.TrustManager;
 import com.diablosmp.plugin.utils.PdcUtils;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class AbsorptionGuiListener implements Listener {
-    
-    private final String GUI_NAME = "§5§lAbsorb Diablo Power";
+public class ItemSecurityListener implements Listener {
+    private final TrustManager trustManager;
 
-    @EventHandler
-    public void onRightClick(PlayerInteractEvent e) {
-        if (e.getAction().isRightClick() && e.getItem() != null && PdcUtils.isDiabloBook(e.getItem())) {
-            Inventory gui = Bukkit.createInventory(null, 27, Component.text(GUI_NAME));
-            // Fill with glass, leave slot 13 open
-            ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-            for (int i = 0; i < 27; i++) { if (i != 13) gui.setItem(i, glass); }
-            e.getPlayer().openInventory(gui);
-        }
+    public ItemSecurityListener(TrustManager trustManager) { 
+        this.trustManager = trustManager; 
     }
 
+    // 🚀 DROP AUR MOVE KARNE KI FULL AZADI (FREEDOM) DE DI GAYI HAI!
+    // Maine yahan se PlayerDropItemEvent aur InventoryClickEvent hata diye hain.
+    // Ab player book ko aaram se 'Q' daba kar drop kar sakta hai aur kisi bhi chest me daal sakta hai.
+
     @EventHandler
-    public void onGuiClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equals(GUI_NAME)) {
-            e.setCancelled(true);
-            if (e.getSlot() == 13 && e.getCursor() != null && PdcUtils.isDiabloBook(e.getCursor())) {
-                Player p = (Player) e.getWhoClicked();
-                e.getCursor().setAmount(0); // Consume item
-                p.closeInventory();
-                ParticleUtils.playAbsorptionAnimation(p, Color.PURPLE);
-                p.sendMessage("§a§lYou have absorbed the Diablo Power!");
-            }
+    public void onDeath(PlayerDeathEvent e) {
+        Player victim = e.getEntity();
+        Player killer = victim.getKiller();
+        
+        // PVP Death Logic (Pehle wala Trust System): 
+        // Agar player kisi aise bande ke hatho marta hai jisko usne /trust nahi kiya tha, 
+        // toh book normal drop me nahi giregi (safe rahegi ya delete ho jayegi).
+        // Agar tum chahte ho ki marne par har kisi ko book drop ho jaye, toh tum is method ko bhi hata sakte ho.
+        if (killer == null || !trustManager.hasTrust(killer.getUniqueId(), victim.getUniqueId())) {
+            e.getDrops().removeIf(PdcUtils::isDiabloBook); // Remove from drops if not trusted kill
         }
     }
 }
