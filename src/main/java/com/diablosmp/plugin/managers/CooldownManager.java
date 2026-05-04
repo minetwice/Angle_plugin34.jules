@@ -1,5 +1,6 @@
 package com.diablosmp.plugin.managers;
 
+import org.bukkit.entity.Player; // <--- YEH LINE MISSING THI
 import java.util.HashMap;
 import java.util.UUID;
 
