@@ -21,7 +21,7 @@ public class DiabloSmp extends JavaPlugin {
         abilityManager = new AbilityManager();
         trustManager = new TrustManager();
 
-        // Register abilities - Diablo SMP Core
+        // Register abilities - Diablo SMP Core v1.1
         abilityManager.registerAbility(new SoulShackleAbility(this));
         abilityManager.registerAbility(new HellfireWingsAbility(this));
 
