@@ -61,6 +61,8 @@ public class AbsorptionListener implements Listener {
                         event.setCursor(null);
                         player.closeInventory();
                         playAbsorptionEffect(player, abilityName);
+
+                        Bukkit.broadcastMessage("§8§l[§6§lDISCOVERY§8§l] §f" + player.getName() + " §7has unlocked the ancient power of §6§l" + abilityName + "§7!");
                     } else {
                         player.sendMessage("§cInvalid ability book!");
                     }

@@ -1,21 +1,32 @@
 package com.diablo.smp.listeners;
 
 import com.diablo.smp.DiabloSmp;
+import com.diablo.smp.abilities.HellfireWingsAbility;
 import com.diablo.smp.abilities.SoulShackleAbility;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 public class SoulShackleListener implements Listener {
     private final DiabloSmp plugin;
 
     public SoulShackleListener(DiabloSmp plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            HellfireWingsAbility hellfire = (HellfireWingsAbility) plugin.getAbilityManager().getAbilityByName("Hellfire Wings");
+            if (hellfire != null && hellfire.isInvulnerable(player.getUniqueId())) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler

@@ -1,6 +1,7 @@
 package com.diablo.smp;
 
 import com.diablo.smp.abilities.AbilityManager;
+import com.diablo.smp.abilities.HellfireWingsAbility;
 import com.diablo.smp.abilities.SoulShackleAbility;
 import com.diablo.smp.listeners.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,8 +21,9 @@ public class DiabloSmp extends JavaPlugin {
         abilityManager = new AbilityManager();
         trustManager = new TrustManager();
 
-        // Register abilities - Diablo SMP Core
+        // Register abilities - Diablo SMP Core v1.1
         abilityManager.registerAbility(new SoulShackleAbility(this));
+        abilityManager.registerAbility(new HellfireWingsAbility(this));
 
         getServer().getPluginManager().registerEvents(new AbilityListener(this), this);
         getServer().getPluginManager().registerEvents(new SecurityListener(this), this);
