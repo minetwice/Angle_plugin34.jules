@@ -52,7 +52,10 @@ public class AbilityManager {
         
         ItemStack barrier = new ItemStack(Material.BARRIER);
         ItemMeta meta = barrier.getItemMeta();
-        meta.customName(Component.text("Soul Lock", NamedTextColor.RED));
+        
+        // FIXED LINE: displayName instead of customName for Items
+        meta.displayName(Component.text("Soul Lock", NamedTextColor.RED)); 
+        
         barrier.setItemMeta(meta);
         
         for (int i = 9; i < 36; i++) { attacker.getInventory().setItem(i, barrier); }
