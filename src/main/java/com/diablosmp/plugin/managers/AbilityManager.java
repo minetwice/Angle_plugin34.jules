@@ -1,7 +1,5 @@
 package com.diablosmp.plugin.managers;
 
 public class AbilityManager {
-    public AbilityManager() {
-        // TODO: Initialize ability logic
-    }
+    // Handles all abilities logic (Soul Weaver, etc.)
 }
