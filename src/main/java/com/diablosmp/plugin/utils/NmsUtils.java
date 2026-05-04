@@ -1,5 +1,6 @@
 package com.diablosmp.plugin.utils;
-
 public class NmsUtils {
-    // For any NMS interaction if absolutely necessary
+    public static void initializeNmsComponents() {
+        // Safe placeholder
+    }
 }
