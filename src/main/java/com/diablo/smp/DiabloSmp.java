@@ -35,7 +35,7 @@ public class DiabloSmp extends JavaPlugin {
         getCommand("diablo").setTabCompleter(new DiabloCommand(this));
 
         Logger logger = getLogger();
-        logger.info("DiabloSmp Plugin has been enabled!");
+        logger.info("DiabloSmp Plugin v1.1 has been enabled!");
     }
 
     public AbilityManager getAbilityManager() {
