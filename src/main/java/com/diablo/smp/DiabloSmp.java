@@ -20,7 +20,7 @@ public class DiabloSmp extends JavaPlugin {
         abilityManager = new AbilityManager();
         trustManager = new TrustManager();
 
-        // Register abilities
+        // Register abilities - Diablo SMP Core
         abilityManager.registerAbility(new SoulShackleAbility(this));
 
         getServer().getPluginManager().registerEvents(new AbilityListener(this), this);
@@ -35,7 +35,7 @@ public class DiabloSmp extends JavaPlugin {
         getCommand("diablo").setTabCompleter(new DiabloCommand(this));
 
         Logger logger = getLogger();
-        logger.info("DiabloSmp Plugin has been enabled!");
+        logger.info("DiabloSmp Plugin v1.1 has been enabled!");
     }
 
     public AbilityManager getAbilityManager() {
@@ -48,6 +48,12 @@ public class DiabloSmp extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (abilityManager != null) {
+            SoulShackleAbility soulShackle = (SoulShackleAbility) abilityManager.getAbilityByName("Soul Shackle");
+            if (soulShackle != null) {
+                soulShackle.cleanup();
+            }
+        }
         getLogger().info("DiabloSmp Plugin has been disabled!");
     }
 
