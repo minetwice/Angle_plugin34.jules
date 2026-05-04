@@ -6,12 +6,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TrustCommand implements CommandExecutor, TabCompleter {
     private final DiabloSmp plugin;
@@ -51,11 +52,16 @@ public class TrustCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
-                    .collect(Collectors.toList());
+            List<String> players = new ArrayList<>();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (sender instanceof Player && p.getName().equals(sender.getName())) continue;
+                players.add(p.getName());
+            }
+            List<String> suggestions = new ArrayList<>();
+            StringUtil.copyPartialMatches(args[0], players, suggestions);
+            Collections.sort(suggestions);
+            return suggestions;
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 }

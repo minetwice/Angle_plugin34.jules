@@ -67,7 +67,7 @@ public class SoulShackleAbility extends Ability {
         statue.setCustomName("§b§lStatue: " + player.getName());
         statue.setCustomNameVisible(true);
         statue.setInvulnerable(true);
-        statue.getEquipment().setHelmet(new ItemStack(Material.PLAYER_HEAD)); // Visual representation
+        statue.getEquipment().setHelmet(new ItemStack(Material.PLAYER_HEAD));
 
         statues.put(playerUuid, statue);
         controlling.put(playerUuid, victimUuid);
@@ -83,8 +83,6 @@ public class SoulShackleAbility extends Ability {
             victimPlayer.getInventory().clear();
             victimPlayer.setGameMode(GameMode.SPECTATOR);
         } else {
-            // If it's a mob, we just clear player inv or keep it but lock it?
-            // The request says "convert into it", let's assume we use mob's limited interaction
             player.getInventory().clear();
         }
 
@@ -104,7 +102,10 @@ public class SoulShackleAbility extends Ability {
                 }
 
                 drawParticleLine(statue.getLocation(), player.getLocation());
-                player.teleport(victim.getLocation());
+
+                // Victim (if mob or player) should be controlled by the user
+                // To "control" the body, we move the body to the player
+                victim.teleport(player.getLocation());
 
                 ticks++;
             }
@@ -123,7 +124,7 @@ public class SoulShackleAbility extends Ability {
             statue.remove();
         }
 
-        if (player.isOnline()) {
+        if (player != null && player.isOnline()) {
             player.getInventory().setContents(savedInventories.get(playerUuid));
             if (returnLoc != null) player.teleport(returnLoc);
             player.sendMessage("§b§lSoul Shackle: §7Connection lost.");
@@ -139,6 +140,17 @@ public class SoulShackleAbility extends Ability {
         savedInventories.remove(playerUuid);
         savedInventories.remove(victimUuid);
         savedGameModes.remove(victimUuid);
+    }
+
+    public void cleanup() {
+        for (UUID playerUuid : statues.keySet()) {
+            Player player = org.bukkit.Bukkit.getPlayer(playerUuid);
+            UUID victimUuid = controlling.get(playerUuid);
+            Entity victim = org.bukkit.Bukkit.getEntity(victimUuid);
+            if (victim instanceof LivingEntity) {
+                stopSoulExchange(player, (LivingEntity) victim);
+            }
+        }
     }
 
     private void lockInnerInventory(Player player) {

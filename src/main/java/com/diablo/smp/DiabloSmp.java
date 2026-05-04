@@ -48,6 +48,12 @@ public class DiabloSmp extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (abilityManager != null) {
+            SoulShackleAbility soulShackle = (SoulShackleAbility) abilityManager.getAbilityByName("Soul Shackle");
+            if (soulShackle != null) {
+                soulShackle.cleanup();
+            }
+        }
         getLogger().info("DiabloSmp Plugin has been disabled!");
     }
 

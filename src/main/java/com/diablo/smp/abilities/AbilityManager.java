@@ -1,7 +1,9 @@
 package com.diablo.smp.abilities;
 
 import org.bukkit.entity.Player;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +18,10 @@ public class AbilityManager {
 
     public Ability getAbilityByName(String name) {
         return registeredAbilities.get(name);
+    }
+
+    public List<String> getRegisteredAbilityNames() {
+        return new ArrayList<>(registeredAbilities.keySet());
     }
 
     public void setAbility(Player player, Ability ability) {
