@@ -1,19 +1,24 @@
 package com.diablosmp.plugin.commands;
 
+import com.diablosmp.plugin.managers.TrustManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import java.util.List;
+import org.bukkit.entity.Player;
 
-public class DiabloCommand implements CommandExecutor, TabCompleter {
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return true;
-    }
+public class TrustCommand implements CommandExecutor {
+    private final TrustManager trustManager;
+    public TrustCommand(TrustManager trustManager) { this.trustManager = trustManager; }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
+    public boolean onCommand(org.bukkit.command.CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player p && args.length == 1) {
+            Player target = Bukkit.getPlayer(args[0]);
+            if (target != null && target != p) {
+                trustManager.createContract(p, target);
+                return true;
+            }
+        }
+        return false;
     }
 }
