@@ -34,11 +34,14 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player p && e.getEntity() instanceof LivingEntity target) {
-            // Check if player has ability item in main hand (Assume "Soul Weaver" is Stage 1)
-            if (abilityManager.getStage(p.getUniqueId()) == 1 && p.isSneaking() == false) {
-                abilityManager.executeSoulWeaver(p, target);
-                e.setCancelled(true);
+        if (e.getDamager() instanceof Player p && e.getEntity() instanceof org.bukkit.entity.LivingEntity target) {
+            
+            // Ab ability sirf tab chalegi jab player ne absorb ki ho (PdcUtils.hasAbility == true)
+            if (com.diablosmp.plugin.utils.PdcUtils.hasAbility(p)) {
+                if (abilityManager.getStage(p.getUniqueId()) == 1 && !p.isSneaking()) {
+                    abilityManager.executeSoulWeaver(p, target);
+                    e.setCancelled(true);
+                }
             }
         }
     }
